@@ -3,8 +3,8 @@ using ProyectoAplicado.DAL;
 using ProyectoAplicado.Models;
 using System.Linq.Expressions;
 
-namespace ProyectoAplicado.Services
-{
+namespace ProyectoAplicado.Services;
+
     public class BebidasService
     {
        
@@ -63,5 +63,5 @@ namespace ProyectoAplicado.Services
             }
         }
 
-    }
+    
 
