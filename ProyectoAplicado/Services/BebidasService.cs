@@ -7,8 +7,8 @@ namespace ProyectoAplicado.Services
 {
     public class BebidasService
     {
-        public class BebidasService
-        {
+       
+        
             private readonly Contexto _contexto;
 
             public BebidasService(Contexto contexto)
@@ -64,4 +64,4 @@ namespace ProyectoAplicado.Services
         }
 
     }
-}
+
