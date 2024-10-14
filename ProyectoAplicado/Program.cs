@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using ProyectoAplicado.Components;
+using ProyectoAplicado.DAL;
+using ProyectoAplicado.Services;
 
 namespace ProyectoAplicado
 {
@@ -11,6 +14,19 @@ namespace ProyectoAplicado
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            //La Inyeccion del contexto
+            var ConStr = builder.Configuration.GetConnectionString("ConStr");
+            builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlite(ConStr));
+
+            //La Inyeccion del services CocineroService
+            builder.Services.AddScoped<CocineroService>();
+
+            //La Inyeccion del services ComidaService
+            builder.Services.AddScoped<ComidaService>();
+
+            //La Inyeccion del services BebidasService
+            builder.Services.AddScoped<BebidasService>();
 
             var app = builder.Build();
 
