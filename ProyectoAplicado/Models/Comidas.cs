@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProyectoAplicado.Models
-{
+namespace ProyectoAplicado.Models;
+
     public class Comidas
     {
         [Key]
@@ -24,6 +24,5 @@ namespace ProyectoAplicado.Models
         public decimal Precio { get; set; }
 
         [Required(ErrorMessage = "Colocame la disponibilidad.")]
-        public bool Disponibilidad { get; set; } = true;
+        public string Disponibilidad { get; set; } 
     }
-}
