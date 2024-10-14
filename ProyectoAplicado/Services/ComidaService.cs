@@ -61,7 +61,7 @@ public class ComidaService
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.ComidaId == comidaId);
     }
-    //Metodo Lista
+    //Metodo Listar
     public async Task<List<Comidas>> Listar(Expression<Func<Comidas, bool>> criterio)
     {
         return await _contexto.Comidas
