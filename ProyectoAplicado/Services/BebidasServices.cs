@@ -5,13 +5,13 @@ using System.Linq.Expressions;
 
 namespace ProyectoAplicado.Services;
 
-    public class BebidasService
+    public class BebidasServices
     {
        
         
             private readonly Contexto _contexto;
 
-            public BebidasService(Contexto contexto)
+            public BebidasServices(Contexto contexto)
             {
                 _contexto = contexto;
             }
