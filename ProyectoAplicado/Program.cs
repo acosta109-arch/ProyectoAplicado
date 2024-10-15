@@ -20,13 +20,13 @@ namespace ProyectoAplicado
             builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlite(ConStr));
 
             //La Inyeccion del services CocineroService
-            builder.Services.AddScoped<CocineroService>();
+            builder.Services.AddScoped<CocineroServices>();
 
             //La Inyeccion del services ComidaService
-            builder.Services.AddScoped<ComidaService>();
+            builder.Services.AddScoped<ComidaServices>();
 
             //La Inyeccion del services BebidasService
-            builder.Services.AddScoped<BebidasService>();
+            builder.Services.AddScoped<BebidasServices>();
 
             var app = builder.Build();
 
