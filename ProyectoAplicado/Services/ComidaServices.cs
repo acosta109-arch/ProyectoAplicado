@@ -5,10 +5,10 @@ using System.Linq.Expressions;
 
 namespace ProyectoAplicado.Services;
 
-public class ComidaService
+public class ComidaServices
 {
     private readonly Contexto _contexto;
-    public ComidaService(Contexto contexto)
+    public ComidaServices(Contexto contexto)
     {
         _contexto = contexto;
     }

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace ProyectoAplicado.Services;
 
-public class CocineroService
+public class CocineroServices
 {
     private readonly Contexto _contexto;
 
