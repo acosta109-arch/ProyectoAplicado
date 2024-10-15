@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoAplicado.Components;
 using ProyectoAplicado.DAL;
+using ProyectoAplicado.Models;
 using ProyectoAplicado.Services;
 
 namespace ProyectoAplicado
@@ -19,14 +20,21 @@ namespace ProyectoAplicado
             var ConStr = builder.Configuration.GetConnectionString("ConStr");
             builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlite(ConStr));
 
-            //La Inyeccion del services CocineroService
+            //La Inyeccion del services CocineroServices
             builder.Services.AddScoped<CocineroServices>();
 
-            //La Inyeccion del services ComidaService
+            //La Inyeccion del services ComidaServices
             builder.Services.AddScoped<ComidaServices>();
 
-            //La Inyeccion del services BebidasService
+            //La Inyeccion del services BebidasServices
             builder.Services.AddScoped<BebidasServices>();
+            //La Inyeccion del services ComandaServices
+            builder.Services.AddScoped<ComandaServices>();
+            //La Inyeccion del services MesaServices
+            builder.Services.AddScoped<MesaServices>();
+            //La Inyeccion del services MeseraServices
+            builder.Services.AddScoped <MeseraServices>();
+
 
             var app = builder.Build();
 
