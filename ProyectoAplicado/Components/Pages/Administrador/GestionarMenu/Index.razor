@@ -1,0 +1,92 @@
+﻿@page "/Index/GestionarMenu"
+
+<PageTitle>Gestionar menu</PageTitle>
+<style>
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-body {
+        padding: 20px;
+        text-align: center;
+        background-color: #fff;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+        .card-body h5 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card-body p {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+</style>
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 text-success">Area de comida y bebida</h1>
+            <p class="lead text-muted">Seleccione una opción:</p>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-lg h-100 d-flex flex-column">
+                    <img src="https://www.marthadebayle.com/wp-content/uploads/2024/05/comida-chatarra-y-como-evitarla.jpg" class="card-img-top" alt="Comidas" style="object-fit: cover; height: 200px;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Comidas</h5>
+                        <p class="card-text flex-grow-1">Gestionar toda la comida del restaurante.</p>
+                        <a href="/menu-management" class="btn btn-success mt-auto">Comidas</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card shadow-lg h-100 d-flex flex-column">
+                    <img src="https://www.semana.com/resizer/v2/6CIKIETI2VFNZICHOAXJC7B7TU.jpg?auth=e60e391cd214804d0a36c9d729d19311de6f81ad0aef1c73d1c560f42b6c998d&smart=true&quality=75&width=1280" class="card-img-top" alt="Bebidas" style="object-fit: cover; height: 200px;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Bebidas</h5>
+                        <p class="card-text flex-grow-1">Gestionar todas las bebidas del restaurante.</p>
+                        <a href="/reservations" class="btn btn-success mt-auto">Bebidas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
