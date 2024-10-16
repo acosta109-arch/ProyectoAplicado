@@ -14,5 +14,5 @@ public class Contexto:DbContext
     public DbSet<Comanda> Comandas { get; set; }
     public DbSet<Mesa> Mesas { get; set; }
     public DbSet<Mesera> meseras { get; set; }
-
+     
 }
