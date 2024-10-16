@@ -26,4 +26,7 @@ public class Bebidas
 
     [Required(ErrorMessage = "La disponibilidad es obligatoria")]
     public string Disponibilidad { get; set; }
+
+    [Required(ErrorMessage = "La foto es obligatoria.")]
+    public string FotoURL { get; set; }
 }

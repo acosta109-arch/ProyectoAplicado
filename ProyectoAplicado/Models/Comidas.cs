@@ -24,5 +24,8 @@ namespace ProyectoAplicado.Models;
         public decimal Precio { get; set; }
 
         [Required(ErrorMessage = "Colocame la disponibilidad.")]
-        public string Disponibilidad { get; set; } 
+        public string Disponibilidad { get; set; }
+
+        [Required(ErrorMessage = "La foto es obligatoria.")]
+        public string FotoURL { get; set; }
     }
