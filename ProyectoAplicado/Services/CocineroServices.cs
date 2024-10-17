@@ -54,13 +54,13 @@ public class CocineroServices
             .ToList();
     }
 
-    public async Task<bool> ValidarNombre(string cocinero)
+    public async Task<bool> ValidarCocineroUnico(int cocineroId, string nombre, string descripcion, string telefono)
     {
-        return await _contexto.Cocineros.AnyAsync(c => c.NombreCompleto == cocinero);
-    }
-
-    public async Task<bool> ValidarNumero(string numero)
-    {
-        return await _contexto.Cocineros.AnyAsync(c => c.Telefono == numero);
+        var cocineroExistente = await _contexto.Cocineros
+            .Where(c => c.CocineroId != cocineroId)
+            .Where(c => c.NombreCompleto == nombre)
+            .Where(c => c.Telefono == telefono)
+            .FirstOrDefaultAsync();
+        return cocineroExistente == null;
     }
 }

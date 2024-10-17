@@ -69,4 +69,14 @@ public class ComidaServices
             .Where(criterio)
             .ToListAsync();
     }
+
+    public async Task<bool> ValidarComidaUnica(int comidaId, string nombre, string descripcion)
+    {
+        var comidaExistente = await _contexto.Comidas
+                .Where(c => c.ComidaId != comidaId)
+                .Where(c => c.Nombre == nombre || c.Descripcion == descripcion)
+                .FirstOrDefaultAsync();
+
+        return comidaExistente == null;
+    }
 }
