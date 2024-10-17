@@ -13,6 +13,6 @@ public class Contexto:DbContext
     public DbSet<Comidas> Comidas { get; set; }
     public DbSet<Comanda> Comandas { get; set; }
     public DbSet<Mesa> Mesas { get; set; }
-    public DbSet<Mesera> meseras { get; set; }
+    public DbSet<Mesera> Meseras { get; set; }
      
 }
