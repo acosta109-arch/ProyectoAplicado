@@ -1,0 +1,228 @@
+﻿@page "/Index/Bebidas"
+@rendermode InteractiveServer
+@inject BebidasServices bebidasServices
+@inject NavigationManager navigation
+
+<PageTitle>Inicio bebidas</PageTitle>
+<style>
+    .titulo {
+        font-size: 2.5rem;
+        color: #2a9d8f;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .filter-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .search-box {
+        width: 60%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #2a9d8f;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-size: 1.1rem;
+    }
+
+    .tipo-selector {
+        width: 35%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #2a9d8f;
+        font-size: 1.1rem;
+    }
+
+    .product-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        align-items: center;
+        padding-bottom: 15px; 
+    }
+
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .product-img {
+        border-radius: 12px 12px 0 0;
+        height: 150px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+
+    .card-body {
+        flex-grow: 1; 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        align-items: center; 
+        text-align: center; 
+        padding: 10px;
+        width: 100%;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #264653;
+    }
+
+
+    .price {
+        color: #e76f51;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .cart-icon {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: #2a9d8f;
+        color: white;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .cart-icon:hover {
+            background-color: #21867a;
+        }
+
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 15px; 
+    }
+
+    .card-footer a {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.0rem;
+    }
+
+        .card-footer a i {
+            font-size: 1.0rem;
+        }
+
+    .icon-label {
+        font-size: 0.7rem; 
+        color: black;
+        margin-top: 3px;
+    }
+
+
+
+</style>
+<div class="container mt-4">
+    <h1 class="text-center mb-5 titulo"><i class="fa-solid fa-champagne-glasses"></i>  Área de bebidas  <i class="fa-solid fa-champagne-glasses"></i></h1>
+    <div class="text-left mb-4">
+        <a href="/Create/Bebidas" class="btn btn-success"><i class="fa-solid fa-square-plus"></i> Añadir bebida</a>
+    </div>
+    <div class="filter-container mb-4">
+        <input type="text" class="form-control search-box" placeholder="Buscar por nombre..." @oninput="AplicarFiltro" @bind="busquedaNombre" />
+        
+        <select class="form-select tipo-selector" @onchange="FiltrarPorTipo">
+            <option value="">Todos</option>
+            <option value="Alcoholica">Alcohólica</option>
+            <option value="Jugos">Jugos</option>
+            <option value="Gaseosa">Gaseosa</option>
+            <option value="Agua">Agua</option>
+        </select>
+
+    </div>
+
+    <div class="row" id="product-list">
+        @foreach (var bebida in bebidasFiltradas)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card product-card h-100">
+                    <img src="@bebida.FotoURL" class="card-img-top product-img" alt="@bebida.Nombre">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@bebida.Nombre</h5>
+                        <p class="card-text">@bebida.Descripcion</p>
+                        <p class="price"><strong>RD$ @bebida.Precio</strong></p>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Details/@bebida.BebidaId" class="btn btn-warning text-white rounded-circle" title="Ver detalles">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </a>
+                                <span class="icon-label">Info</span>
+                            </div>
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Edit/@bebida.BebidaId" class="btn btn-primary rounded-circle text-white" title="Modificar">
+                                    <i class="fa-solid fa-sliders"></i>
+                                </a>
+                                <span class="icon-label">Editar</span>
+                            </div>
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Delete/@bebida.BebidaId" class="btn btn-danger rounded-circle text-white" title="Eliminar">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                                <span class="icon-label">Eliminar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+
+
+@code {
+    public List<Bebidas> bebidas = new List<Bebidas>();
+    private string filtro = "";
+    private string valorFiltro = "";
+    private List<Bebidas> bebidasFiltradas = new();
+    private string tipoSeleccionado = "";
+    private string busquedaNombre = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        bebidas = await bebidasServices.Listar(c => true);
+        AplicarFiltro();
+    }
+
+
+    private void FiltrarPorTipo(ChangeEventArgs e)
+    {
+        tipoSeleccionado = e.Value?.ToString() ?? "";
+        AplicarFiltro(); 
+    }
+
+    private void AplicarFiltro()
+    {
+        bebidasFiltradas = bebidas
+            .Where(b => (string.IsNullOrEmpty(tipoSeleccionado) || b.Tipo.Contains(tipoSeleccionado, StringComparison.OrdinalIgnoreCase))
+                     && (string.IsNullOrEmpty(busquedaNombre) || b.Nombre.Contains(busquedaNombre, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+    }
+}

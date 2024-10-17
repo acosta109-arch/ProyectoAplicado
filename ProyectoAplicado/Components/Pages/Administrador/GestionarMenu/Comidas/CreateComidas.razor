@@ -1,0 +1,86 @@
+﻿@page "/Create/Comidas"
+@rendermode InteractiveServer
+@inject ComidaServices comidasServices
+@inject NavigationManager navigation
+
+
+<PageTitle>Añadir nueva bebida</PageTitle>
+<EditForm Model="comidas" OnValidSubmit="Crear">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            @*Header*@
+            <div class="card-header bg-success text-white">
+                <h2><strong>Añadir nueva bebida</strong></h2>
+            </div>
+            @*Body*@
+            <div class="card-body">
+                <label class="form-label" for="descripcion"><strong>Nombre de la comida</strong></label>
+                <InputText id="nombres" class="form-control" @bind-Value="comidas.Nombre"></InputText>
+                <ValidationMessage For="@(() => comidas.Nombre)"></ValidationMessage>
+
+                <label class="form-label" for="descripcion"><strong>Descripci&oacute;n de la comida</strong></label>
+                <InputText id="nombres" class="form-control" @bind-Value="comidas.Descripcion"></InputText>
+                <ValidationMessage For="@(() => comidas.Descripcion)"></ValidationMessage>
+
+                <label class="form-label" for="tipoBebida"><strong>Categoria de la comida</strong></label>
+                <InputSelect id="tipoBebida" class="form-control" @bind-Value="comidas.Categoria">
+                    <option value="">Seleccione un tipo</option>
+                    <option value="Entradas">Entradas</option>
+                    <option value="Platos fuertes">Platos fuertes</option>
+                    <option value="Postres">postres</option>
+                </InputSelect>
+                <ValidationMessage For="@(() => comidas.Categoria)"></ValidationMessage>
+
+                <label class="form-label" for="descripcion"><strong>Precio de la comida</strong></label>
+                <InputNumber id="nombres" class="form-control" @bind-Value="comidas.Precio"></InputNumber>
+                <ValidationMessage For="@(() => comidas.Precio)"></ValidationMessage>
+
+                <label class="form-label" for="disponibilidad"><strong>Disponibilidad</strong></label>
+                <InputSelect id="disponibilidad" class="form-control" @bind-Value="comidas.Disponibilidad">
+                    <option value="">Seleccione una opción</option>
+                    <option value="Disponible">Disponible</option>
+                    <option value="No disponible">No disponible</option>
+                </InputSelect>
+                <ValidationMessage For="@(() => comidas.Disponibilidad)"></ValidationMessage>
+
+                <label class="form-label" for="descripcion"><strong>Url de la imagen de la comida</strong></label>
+                <InputText id="nombres" class="form-control" @bind-Value="comidas.FotoURL"></InputText>
+                <ValidationMessage For="@(() => comidas.FotoURL)"></ValidationMessage>
+            </div>
+            @*Footer*@
+            <div class="card-footer">
+                <button type="button" class="btn btn-secondary" @onclick="Volver"><i class="fa-solid fa-backward"></i> Volver</button>
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-share-from-square"></i>  Guardar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    public Comidas comidas { get; set; } = new Comidas();
+    public bool NombreRepetido { get; set; }
+
+
+    public async Task<bool> Validar()
+    {
+        var existeBebida = await comidasServices.ValidarComidaUnica(comidas.ComidaId, comidas.Nombre, comidas.Descripcion);
+        return existeBebida == null;
+    }
+
+    public async Task Crear()
+    {
+        if (!await Validar())
+        {
+            await comidasServices.Guardar(comidas);
+            comidas = new Comidas();
+            Volver();
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Index/Comidas");
+    }
+}
+
