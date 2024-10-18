@@ -1,0 +1,89 @@
+﻿@page "/Index/AgregarCocinero"
+@inject CocineroServices CocineroServices
+@using ProyectoAplicado.Models
+
+<PageTitle>Agregar Cocinero</PageTitle>
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    .btn-back {
+        background-color: #007bff;
+        color: white;
+        margin-top: 15px;
+    }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-register {
+        margin-top: 20px; 
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-success text-center">Registrar Nuevo Cocinero</h1>
+
+    <div class="form-container">
+        <EditForm Model="cocinero" OnValidSubmit="GuardarCocinero">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="nombreCompleto">Nombre Completo</label>
+                <InputText id="nombreCompleto" @bind-Value="cocinero.NombreCompleto" class="form-control" />
+                <ValidationMessage For="@(() => cocinero.NombreCompleto)" />
+            </div>
+
+            <div class="form-group">
+                <label for="especialidad">Especialidad</label>
+                <InputText id="especialidad" @bind-Value="cocinero.Especialidad" class="form-control" />
+                <ValidationMessage For="@(() => cocinero.Especialidad)" />
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <InputText id="telefono" @bind-Value="cocinero.Telefono" class="form-control" />
+                <ValidationMessage For="@(() => cocinero.Telefono)" />
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado</label>
+                <InputText id="estado" @bind-Value="cocinero.Estado" class="form-control" />
+                <ValidationMessage For="@(() => cocinero.Estado)" />
+            </div>
+
+            <button type="submit" class="btn btn-success btn-register">Registrar Cocinero</button>
+        </EditForm>
+
+        @if (mensaje != null)
+        {
+            <div class="alert alert-success mt-3">@mensaje</div>
+        }
+
+        <NavLink class="btn btn-back" href="/Index/GestionarCocineros">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </NavLink>
+    </div>
+</div>
+
+@code {
+    private Cocineros cocinero = new Cocineros();
+    private string? mensaje;
+
+    private async Task GuardarCocinero()
+    {
+        var resultado = await CocineroServices.Insertar(cocinero);
+        mensaje = resultado ? "Cocinero registrado exitosamente." : "Error al registrar el cocinero.";
+        cocinero = new Cocineros(); // Reiniciar el formulario
+    }
+}

@@ -34,6 +34,8 @@ namespace ProyectoAplicado
             builder.Services.AddScoped<MesaServices>();
             //La Inyeccion del services MeseraServices
             builder.Services.AddScoped <MeseraServices>();
+            //La Inteccion del services CocineroServices
+            builder.Services.AddScoped<CocineroServices>();
 
 
             var app = builder.Build();
