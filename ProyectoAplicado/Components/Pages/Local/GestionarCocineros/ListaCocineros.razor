@@ -1,0 +1,83 @@
+﻿@page "/Index/ListaCocineros"
+@inject CocineroServices CocineroServices
+@using ProyectoAplicado.Models
+
+<PageTitle>Lista de Cocineros</PageTitle>
+
+<style>
+    .table-container {
+        margin: auto;
+        max-width: 800px;
+    }
+
+    .btn-back {
+        background-color: #007bff;
+        color: white;
+        margin-top: 15px;
+    }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-success text-center">Lista de Cocineros</h1>
+
+    <div class="table-container">
+        @if (cocineros != null && cocineros.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Especialidad</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cocinero in cocineros)
+                    {
+                        <tr>
+                            <td>@cocinero.NombreCompleto</td>
+                            <td>@cocinero.Especialidad</td>
+                            <td>@cocinero.Telefono</td>
+                            <td>@cocinero.Estado</td>
+                            <td>
+                                <button class="btn btn-danger" @onclick="() => EliminarCocinero(cocinero.CocineroId)">Eliminar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No hay cocineros registrados.</p>
+        }
+
+        <NavLink class="btn btn-back" href="/Index/GestionarCocineros">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </NavLink>
+    </div>
+</div>
+
+@code {
+    private List<Cocineros> cocineros;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cocineros = await CocineroServices.Listar(c => true); // Carga todos los cocineros
+    }
+
+    private async Task EliminarCocinero(int id)
+    {
+        var resultado = await CocineroServices.Eliminar(id);
+        if (resultado)
+        {
+            cocineros = await CocineroServices.Listar(c => true); // Actualiza la lista
+        }
+    }
+}
