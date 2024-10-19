@@ -1,0 +1,441 @@
+﻿@page "/Index/MenuRemoto"
+@rendermode InteractiveServer
+@inject ComidaServices comidasService
+@inject BebidasServices bebidasService
+@inject NavigationManager navigation
+@inject IJSRuntime JS
+
+<PageTitle>Menu</PageTitle>
+
+<style>
+    .titulo {
+        font-size: 2.5rem;
+        color: #2a9d8f;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .filter-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .search-box {
+        width: 60%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #2a9d8f;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-size: 1.1rem;
+    }
+
+    .tipo-selector {
+        width: 35%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #2a9d8f;
+        font-size: 1.1rem;
+    }
+
+    .product-card {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+    }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .product-img {
+        border-radius: 12px 12px 0 0;
+        height: 150px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #264653;
+    }
+
+    .price {
+        color: #e76f51;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .cart-icon {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: #2a9d8f;
+        color: white;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .cart-icon:hover {
+            background-color: #21867a;
+        }
+
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 15px;
+    }
+
+    .card-footer a {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.0rem;
+    }
+
+        .card-footer a i {
+            font-size: 1.0rem;
+        }
+
+    .icon-label {
+        font-size: 0.7rem;
+        color: black;
+        margin-top: 3px;
+    }
+
+    .carousel-inner {
+        max-height: 300px;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .carousel-item {
+        height: 300px;
+    }
+
+    .offer-container {
+        display: flex;
+        height: 100%;
+        gap: 20px;
+        /* Aumentamos el padding lateral para dejar espacio a los botones */
+        padding: 0 50px;
+    }
+
+    .offer-card {
+        flex: 1;
+        position: relative;
+        height: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .offer-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+    .offer-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        color: white;
+    }
+
+        .offer-caption h5 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .offer-caption p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 50px; /* Ancho fijo para los botones */
+        opacity: 0.8;
+        background-color: rgba(0,0,0,0.3);
+        height: 300px;
+        /* Quitamos el border-radius de los lados que tocan las imágenes */
+        position: absolute;
+        top: 0;
+    }
+
+    .carousel-control-prev {
+        border-radius: 8px 0 0 8px;
+        left: 0;
+    }
+
+    .carousel-control-next {
+        border-radius: 0 8px 8px 0;
+        right: 0;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .carousel-indicators {
+        bottom: -40px;
+    }
+
+</style>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-5 titulo"><i class="fa-solid fa-utensils"></i> Menu  <i class="fa-solid fa-utensils"></i></h1>
+
+
+    <div class="container mt-4">
+        <div id="carruselOfertas" class="carousel slide mb-5" data-bs-ride="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carruselOfertas" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carruselOfertas" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carruselOfertas" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <!-- Primer slide con dos ofertas -->
+                <div class="carousel-item active">
+                    <div class="offer-container">
+                        <div class="offer-card">
+                            <img src="https://storage.googleapis.com/fitia_public_images/recipes%2FDO-R-V-00000011_qdkiid5a0x66vw8i5y4qamc1_large.jpg" alt="Oferta 1">
+                            <div class="offer-caption">
+                                <h5>Oferta Especial 1</h5>
+                                <p>50% de descuento en bebidas seleccionadas</p>
+                            </div>
+                        </div>
+                        <div class="offer-card">
+                            <img src="/images/oferta2.jpg" alt="Oferta 2">
+                            <div class="offer-caption">
+                                <h5>Oferta Especial 2</h5>
+                                <p>¡Compra uno y llévate otro gratis en postres!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segundo slide con dos ofertas -->
+                <div class="carousel-item">
+                    <div class="offer-container">
+                        <div class="offer-card">
+                            <img src="https://assets.unileversolutions.com/recipes-v2/235485.jpg" alt="Oferta 3">
+                            <div class="offer-caption">
+                                <h5>Oferta Especial 3</h5>
+                                <p>Combo exclusivo: Entrada + Plato fuerte por solo RD$500</p>
+                            </div>
+                        </div>
+                        <div class="offer-card">
+                            <img src="https://api.freelogodesign.org/assets/blog/thumb/6457476a3cdd41118a31f81a20418b56_1176x840.jpg" alt="Oferta 4">
+                            <div class="offer-caption">
+                                <h5>Oferta Especial 4</h5>
+                                <p>Bebidas 2x1 en happy hour</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tercer slide con dos ofertas -->
+                <div class="carousel-item">
+                    <div class="offer-container">
+                        <div class="offer-card">
+                            <img src="/images/oferta5.jpg" alt="Oferta 5">
+                            <div class="offer-caption">
+                                <h5>Oferta Especial 5</h5>
+                                <p>Descuento del 30% en platos principales</p>
+                            </div>
+                        </div>
+                        <div class="offer-card">
+                            <img src="/images/oferta6.jpg" alt="Oferta 6">
+                            <div class="offer-caption">
+                                <h5>Oferta Especial 6</h5>
+                                <p>Postre gratis en pedidos mayores a RD$1000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carruselOfertas" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carruselOfertas" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-container mb-4">
+        <input type="text" class="form-control search-box" placeholder="Buscar por nombre..." @oninput="AplicarFiltro" @bind="busquedaNombre" />
+
+        <select class="form-select tipo-selector" @onchange="FiltrarPorTipo">
+            <option value="">Todos</option>
+            <option value="Entradas">Entradas</option>
+            <option value="Platos fuertes">Platos fuertes</option>
+            <option value="Postres">Postres</option>
+        </select>
+
+    </div>
+
+    <h3>Alimentos</h3>
+
+    <div class="row" id="product-list">
+        @foreach (var comida in ComidasFiltradas)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card product-card h-100">
+                    <img src="@comida.FotoURL" class="card-img-top product-img" alt="@comida.Nombre">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@comida.Nombre</h5>
+                        <p class="card-text">@comida.Descripcion</p>
+                        <p class="price"><strong>RD$ @comida.Precio</strong></p>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Details/@comida.ComidaId" class="btn btn-warning text-white rounded-circle" title="Ver detalles">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </a>
+                                <span class="icon-label">Info</span>
+                            </div>
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Edit/@comida.ComidaId" class="btn btn-success rounded-circle text-white" title="Agregar">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                                <span class="icon-label">Agregar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <h3>Bebidas</h3>
+
+    <div class="row" id="product-list">
+        @foreach (var bebida in bebidasFiltradas)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card product-card h-100">
+                    <img src="@bebida.FotoURL" class="card-img-top product-img" alt="@bebida.Nombre">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@bebida.Nombre</h5>
+                        <p class="card-text">@bebida.Descripcion</p>
+                        <p class="price"><strong>RD$ @bebida.Precio</strong></p>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Details/@bebida.BebidaId" class="btn btn-warning text-white rounded-circle" title="Ver detalles">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </a>
+                                <span class="icon-label">Info</span>
+                            </div>
+                            <div class="text-center mx-4">
+                                <a href="/Bebidas/Edit/@bebida.BebidaId" class="btn btn-success rounded-circle text-white" title="Agregar">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                                <span class="icon-label">Agregar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+@code {
+    public List<Comidas> comidas = new List<Comidas>();
+    public List<Bebidas> bebidas = new List<Bebidas>();
+    private string filtro = "";
+    private string valorFiltro = "";
+    private List<Comidas> ComidasFiltradas = new();
+    private List<Bebidas> bebidasFiltradas = new();
+    private string tipoSeleccionado = "";
+    private string busquedaNombre = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        comidas = await comidasService.Listar(c => true);
+        bebidas = await bebidasService.Listar(c => true);
+        AplicarFiltro();
+    }
+
+    private void FiltrarPorTipo(ChangeEventArgs e)
+    {
+        tipoSeleccionado = e.Value?.ToString() ?? "";
+        AplicarFiltro();
+    }
+
+    private void AplicarFiltro()
+    {
+        ComidasFiltradas = comidas
+            .Where(b => (string.IsNullOrEmpty(tipoSeleccionado) || b.Descripcion.Contains(tipoSeleccionado, StringComparison.OrdinalIgnoreCase))
+                     && (string.IsNullOrEmpty(busquedaNombre) || b.Nombre.Contains(busquedaNombre, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        bebidasFiltradas = bebidas
+        .Where(b => (string.IsNullOrEmpty(busquedaNombre) || b.Nombre.Contains(busquedaNombre, StringComparison.OrdinalIgnoreCase)))
+         .ToList();
+    }
+
+
+}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var myCarousel = document.getElementById('carruselOfertas')
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: false,    // Desactiva el cambio automático
+            wrap: true,        // Permite que el carrusel vuelva al principio/final
+            keyboard: true,    // Permite control con teclado
+            touch: true        // Permite control táctil
+        })
+    });
+</script>
